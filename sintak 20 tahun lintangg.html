@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Aisyah Lintang Pramudita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        /* CSS SETUP */
+        :root {
+            --bg-color: #fce4ec;
+            --primary-color: #f48fb1;
+            --accent-color: #d81b60;
+            --text-color: #555;
+            --envelope-flap: #ec407a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Container Amplop */
+        .container {
+            position: relative;
+            width: 320px; 
+            height: 220px; 
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        /* Saat dibuka, amplop turun */
+        .container.open {
+            transform: translateY(100px);
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        /* Bagian Belakang Amplop */
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #f06292;
+            border-radius: 10px;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        /* Isi Surat (Kertas) */
+        .paper {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            background-color: #fffbfb;
+            left: 5%;
+            bottom: 5%;
+            border-radius: 5px;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            overflow-y: auto; /* scroll */
+            font-family: 'Indie Flower', cursive; /* Font tulisan tangan */
+            font-size: 1.1rem;
+            color: var(--text-color);
+            line-height: 1.6;
+            border: 2px dashed var(--primary-color);
+        }
+
+        /* Scrollbar */
+        .paper::-webkit-scrollbar { width: 8px; }
+        .paper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .paper::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+
+        /* Bagian Depan Amplop (Segitiga Bawah) */
+        .envelope-front {
+            position: absolute;
+            width: 0;
+            height: 0;
+            /* Disesuaikan dengan lebar container (320/2 = 160) */
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-bottom: 130px solid var(--envelope-flap);
+            bottom: 0;
+            border-radius: 0 0 10px 10px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* Tutup Amplop (Segitiga Atas) */
+        .envelope-top {
+            position: absolute;
+            width: 0;
+            height: 0;
+            /* Disesuaikan dengan lebar container (320/2 = 160) */
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid var(--accent-color);
+            top: 0;
+            transform-origin: top;
+            transition: transform 0.6s ease 0.2s; /* Delay sedikit biar kertas naik dulu */
+            z-index: 4;
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* Sticker Bintang */
+        .sticker {
+            position: absolute;
+            top: 70px;
+            left: 142.5px; 
+            font-size: 40px; /* Ukuran bintang agak diperbesar */
+            color: #ff7db0; 
+            z-index: 5;
+            animation: heartbeat 1.5s infinite;
+            cursor: pointer;
+            /* Memberi sedikit outline cahaya biar kontras */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); 
+        }
+
+        .instruction {
+            margin-top: 50px;
+            color: var(--accent-color);
+            font-weight: 600;
+            animation: fadeIn 2s;
+            z-index: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* STATE: Saat Amplop Terbuka */
+        .container.open .envelope-top {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .container.open .paper {
+            transform: translateY(-100px); /* Kertas naik ke atas */
+            height: 350px; /* Kertas memanjang */
+            width: 360px; /* Sedikit lebih lebar dari amplopnya biar pop-out */
+            left: -20px; /* Mengatur posisi horizontal karena diperlebar */
+            z-index: 6;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .container.open .sticker {
+            display: none;
+        }
+
+        /* Animation Keyframes */
+        @keyframes heartbeat {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Animasi Melayang Naik */
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Style untuk elemen hujan (bintang & love) */
+        .rain-element {
+            position: absolute;
+            color: var(--primary-color); /* Warna pink */
+            z-index: -5;
+            bottom: -20px; 
+            pointer-events: none;
+            text-shadow: 0 0 2px #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="instruction">Tap mee...</div>
+
+    <div class="container" onclick="openLetter()">
+        <div class="envelope-back"></div>
+        
+        <div class="paper">
+            <h3 style="text-align: center; color: #d81b60;">Selamat 20 Tahun Lintangg...</h3>
+            <p>
+                Aloo Momoooo, selamat ulang tahun yaaaaaa!. Selamat menyambut kepala duaaa 
+            </p>
+
+            <p>
+                (maaf aku baru sempet ngucapin sekarang (so sad))
+            </p>
+
+            <p>
+                Today marks the precious moment the world was graced with a soul as radiant as yours.
+            </p>
+
+            <p>
+                Just as you once wished for my days to be adorned with a constellation of memories, today I return that wish to you. May your path be lit by the brightest stars, guiding you toward that wondrous dream you’ve always held.
+            </p>
+
+            <p>
+                I know things are different between us right now, but my gratitude remains steadfast. Thank you for the "resplendent memories" and for every lesson you’ve taught me—even the ones I’m still learning these day's.
+            </p>
+
+            <p>
+                You deserve to embrace this day fully, with a heart free of burden and full of hope.
+            </p>
+
+            <p>
+                (biar ga difitnah hasil generate ai :p) aku akan selalu jadi orang kedua yang selalu support kamu dan bangga atas semua usaha dan pencapaian kamu setelah keluargamu:3
+            </p>
+
+            <p style="text-align: center; font-weight: bold; margin-top: 25px;">
+                May you ascend to heights<br>
+                even greater than you imagine.<br>
+                I'm always rooting for you.<br>
+                <span style="font-size: 1.5rem;">❤️</span>
+            </p>
+
+            <p style="text-align: center; font-weight: bold; margin-top: 25px;">
+                (Made with love, hope, and tears), Mimi<br>
+            </p>
+        </div>
+        <div class="envelope-front"></div>
+        <div class="envelope-top"></div>
+        <div class="sticker">★</div>
+    </div>
+
+    <script>
+        function openLetter() {
+            const container = document.querySelector('.container');
+            const instruction = document.querySelector('.instruction');
+            
+            if (!container.classList.contains('open')) {
+                container.classList.add('open');
+                instruction.style.display = 'none';
+                createRain(); // Panggil efek hujan love
+            } else {
+                // Opsional: Klik lagi untuk menutup
+                container.classList.remove('open');
+                instruction.style.display = 'block';
+            }
+                //Mainkan musik
+                var audio = document.getElementById("bgMusic");
+                audio.volume = 0.4; 
+                audio.play().catch(error => {
+                    console.log("Autoplay dicegah browser, perlu interaksi user.");
+                });
+        }
+
+        // --- FUNGSI BARU: HUJAN BINTANG & LOVE ---
+        function createRain() {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < 50; i++) { // Jumlah elemen diperbanyak dikit
+                const drop = document.createElement('div');
+                
+                // Logika Random: 50% kemungkinan Love, 50% Bintang
+                if (Math.random() > 0.5) {
+                    drop.innerHTML = '❤';
+                    drop.style.fontSize = Math.random() * 20 + 10 + 'px';
+                } else {
+                    drop.innerHTML = '★';
+                    drop.style.fontSize = Math.random() * 25 + 15 + 'px'; // Bintang sedikit lebih besar
+                }
+
+                drop.classList.add('rain-element');
+                
+                // Posisi random di lebar layar
+                drop.style.left = Math.random() * 100 + 'vw';
+                // Durasi animasi random biar ga barengan naiknya
+                drop.style.animationDuration = Math.random() * 4 + 3 + 's'; 
+                drop.style.opacity = Math.random() * 0.6 + 0.4;
+                
+                // Pasang animasi naik
+                drop.style.animation = `floatUp ${Math.random() * 4 + 3}s linear forwards`;
+                
+                document.body.appendChild(drop);
+
+                // Hapus elemen setelah selesai animasi biar ga berat
+                setTimeout(() => {
+                    drop.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
